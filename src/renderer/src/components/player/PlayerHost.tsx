@@ -1,13 +1,24 @@
 import { useEffect, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { usePlayerStore } from '@renderer/stores/playerStore'
 import { useUiStore } from '@renderer/stores/uiStore'
+import { useEqualizerEngine } from '@renderer/features/equalizer/useEqualizerEngine'
 
 /**
  * Owns the actual <audio>/<video> elements and keeps them in sync with
  * playerStore. Mounted once at the app root so playback survives navigation
  * between screens.
+ *
+ * Single-active-player guarantee: whenever the active media kind changes
+ * (audio <-> video, or clears to nothing), the *other*, now-inactive
+ * element is explicitly paused and unloaded (src removed + load()) rather
+ * than relying on React removing the `src` attribute alone — that removal
+ * is not synchronous enough to prevent a brief moment where both elements
+ * are technically playing, which is exactly the "video plays under music"
+ * bug this fixes.
  */
 export function PlayerHost(): JSX.Element {
+  const { t } = useTranslation()
   const route = useUiStore((s) => s.route)
   const isQueueOpen = useUiStore((s) => s.isQueueOpen)
   const current = usePlayerStore((s) => s.current)
@@ -31,15 +42,38 @@ export function PlayerHost(): JSX.Element {
 
   const activeElement = current?.kind === 'video' ? videoRef.current : audioRef.current
 
+  useEqualizerEngine(audioRef, videoRef, current?.kind ?? null)
+
+  // Single active player: stop and fully release the element that is NOT
+  // the current media kind whenever the kind changes.
+  useEffect(() => {
+    const stop = (el: HTMLMediaElement | null): void => {
+      if (!el) return
+      el.pause()
+      el.removeAttribute('src')
+      el.load()
+    }
+
+    if (!current) {
+      stop(audioRef.current)
+      stop(videoRef.current)
+    } else if (current.kind === 'video') {
+      stop(audioRef.current)
+    } else {
+      stop(videoRef.current)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [current?.id, current?.kind])
+
   // Fetch a stream URL when a queue navigation set `current` without one.
   useEffect(() => {
     if (current && !streamUrl) {
       window.linplayer.media
         .getStreamUrl(current.path)
         .then((url) => usePlayerStore.getState().setStreamForCurrent(url))
-        .catch(() => setError('Unable to play this file. The format or codec may not be supported.'))
+        .catch(() => setError(t('errors.playbackUnsupported')))
     }
-  }, [current, streamUrl, setError])
+  }, [current, streamUrl, setError, t])
 
   useEffect(() => {
     hasRecordedPlay.current = false
@@ -49,12 +83,12 @@ export function PlayerHost(): JSX.Element {
     if (!activeElement) return
     if (isPlaying) {
       void activeElement.play().catch(() => {
-        setError('Unable to play this file. The format or codec may not be supported.')
+        setError(t('errors.playbackUnsupported'))
       })
     } else {
       activeElement.pause()
     }
-  }, [isPlaying, activeElement, streamUrl, setError])
+  }, [isPlaying, activeElement, streamUrl, setError, t])
 
   useEffect(() => {
     if (!activeElement) return
@@ -109,8 +143,8 @@ export function PlayerHost(): JSX.Element {
   }
 
   const handleError = (): void => {
-    setError('Unable to play this file. The format or codec may not be supported.')
-    pushToast('Playback failed — unsupported format or codec.', 'error')
+    setError(t('errors.playbackUnsupported'))
+    pushToast(t('toast.playbackFailed'), 'error')
   }
 
   const isVideoVisible = current?.kind === 'video' && (isFullscreen || route === 'player')
@@ -138,7 +172,7 @@ export function PlayerHost(): JSX.Element {
           isFullscreen
             ? 'fixed inset-0 z-40 h-full w-full bg-black object-contain'
             : isVideoVisible
-              ? `fixed top-14 bottom-22 left-60 z-20 bg-black object-contain ${isQueueOpen ? 'right-72' : 'right-0'}`
+              ? `fixed top-14 bottom-22 start-60 z-20 bg-black object-contain ${isQueueOpen ? 'end-72' : 'end-0'}`
               : 'fixed h-px w-px overflow-hidden opacity-0 pointer-events-none'
         }
       />
