@@ -1,13 +1,16 @@
-import { Minus, Settings, Square, X } from 'lucide-react'
+import { Loader2, Minus, Settings, Square, X } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { SearchBar } from '@renderer/components/common/SearchBar'
 import { IconButton } from '@renderer/components/common/IconButton'
 import { useLibraryStore } from '@renderer/stores/libraryStore'
 import { useUiStore } from '@renderer/stores/uiStore'
 
 export function TopBar(): JSX.Element {
+  const { t } = useTranslation()
   const searchQuery = useLibraryStore((s) => s.searchQuery)
   const setSearchQuery = useLibraryStore((s) => s.setSearchQuery)
   const runSearch = useLibraryStore((s) => s.runSearch)
+  const scanProgress = useLibraryStore((s) => s.scanProgress)
   const navigate = useUiStore((s) => s.navigate)
   const route = useUiStore((s) => s.route)
 
@@ -22,16 +25,22 @@ export function TopBar(): JSX.Element {
         <div className="flex h-7 w-7 items-center justify-center rounded-md bg-accent text-accent-foreground font-bold text-sm">
           L
         </div>
-        <span className="text-sm font-semibold text-base-100">LinPlayer</span>
+        <span className="text-sm font-semibold text-base-100">{t('app.name')}</span>
       </div>
 
-      <div className="w-full max-w-md app-no-drag">
-        <SearchBar value={searchQuery} onChange={handleSearchChange} />
+      <div className="flex w-full max-w-md min-w-0 items-center gap-2 app-no-drag">
+        <SearchBar value={searchQuery} onChange={handleSearchChange} placeholder={t('topbar.searchPlaceholder')} />
+        {scanProgress?.type === 'progress' && (
+          <div className="flex shrink-0 items-center gap-1.5 text-xs text-base-400">
+            <Loader2 size={13} className="animate-spin" />
+            <span className="hidden lg:inline">{t('library.scanningProgress', { count: scanProgress.scanned })}</span>
+          </div>
+        )}
       </div>
 
       <div className="flex items-center gap-1 app-no-drag">
         <IconButton
-          label="Settings"
+          label={t('topbar.settings')}
           size="sm"
           active={route === 'settings'}
           onClick={() => navigate('settings')}
@@ -39,15 +48,15 @@ export function TopBar(): JSX.Element {
           <Settings size={17} />
         </IconButton>
 
-        <div className="ml-2 flex items-center gap-0.5 border-l border-base-800 pl-2">
-          <IconButton label="Minimize" size="sm" onClick={() => window.linplayer.window.minimize()}>
+        <div className="ms-2 flex items-center gap-0.5 border-s border-base-800 ps-2">
+          <IconButton label={t('topbar.minimize')} size="sm" onClick={() => window.linplayer.window.minimize()}>
             <Minus size={15} />
           </IconButton>
-          <IconButton label="Maximize" size="sm" onClick={() => window.linplayer.window.maximize()}>
+          <IconButton label={t('topbar.maximize')} size="sm" onClick={() => window.linplayer.window.maximize()}>
             <Square size={12} />
           </IconButton>
           <IconButton
-            label="Close"
+            label={t('topbar.close')}
             size="sm"
             className="hover:bg-danger/20 hover:text-danger"
             onClick={() => window.linplayer.window.close()}

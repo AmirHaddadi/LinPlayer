@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { FolderOpen, LayoutGrid, Music2 } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { useLibraryStore } from '@renderer/stores/libraryStore'
 import { usePlayMedia } from '@renderer/hooks/usePlayMedia'
 import { useUiStore } from '@renderer/stores/uiStore'
@@ -10,6 +11,7 @@ import type { HistoryEntry } from '@shared/types/playlist'
 import type { MediaItem } from '@shared/types/media'
 
 export function HomeScreen(): JSX.Element {
+  const { t } = useTranslation()
   const items = useLibraryStore((s) => s.items)
   const favorites = useLibraryStore((s) => s.favorites)
   const toggleFavorite = useLibraryStore((s) => s.toggleFavorite)
@@ -30,7 +32,7 @@ export function HomeScreen(): JSX.Element {
     const opened = await window.linplayer.media.openFileDialog()
     if (opened.length > 0) {
       await useLibraryStore.getState().loadItems()
-      pushToast(`Opened ${opened.length} file${opened.length === 1 ? '' : 's'}.`, 'success')
+      pushToast(t('toast.openedFiles', { count: opened.length }), 'success')
       await playMedia(opened[0].item)
     }
   }
@@ -39,7 +41,7 @@ export function HomeScreen(): JSX.Element {
     const folderPath = await window.linplayer.media.openFolderDialog()
     if (folderPath) {
       await useLibraryStore.getState().addFolder(folderPath)
-      pushToast('Scanning folder for media…', 'info')
+      pushToast(t('toast.scanningFolder'), 'info')
     }
   }
 
@@ -48,16 +50,16 @@ export function HomeScreen(): JSX.Element {
       <div className="flex h-full items-center justify-center">
         <EmptyState
           icon={Music2}
-          title="Your library is empty"
-          description="Open a file or scan a folder to start building your LinPlayer library."
+          title={t('empty.libraryTitle')}
+          description={t('empty.libraryDescription')}
           action={
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               <Button variant="primary" onClick={handleOpenFile}>
-                Open file
+                {t('actions.openFile')}
               </Button>
               <Button variant="secondary" onClick={handleScanFolder}>
-                <FolderOpen size={15} className="mr-1.5" />
-                Scan folder
+                <FolderOpen size={15} className="me-1.5" />
+                {t('actions.scanFolder')}
               </Button>
             </div>
           }
@@ -68,36 +70,36 @@ export function HomeScreen(): JSX.Element {
 
   return (
     <div className="px-6 py-6 space-y-8">
-      <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold text-base-100">Welcome back</h1>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h1 className="text-xl font-semibold text-base-100">{t('home.welcome')}</h1>
         <div className="flex gap-2">
           <Button variant="secondary" size="sm" onClick={handleOpenFile}>
-            Open file
+            {t('actions.openFile')}
           </Button>
           <Button variant="secondary" size="sm" onClick={handleScanFolder}>
-            <FolderOpen size={14} className="mr-1.5" />
-            Scan folder
+            <FolderOpen size={14} className="me-1.5" />
+            {t('actions.scanFolder')}
           </Button>
         </div>
       </div>
 
       {recent.length > 0 && (
-        <Section title="Continue listening">
+        <Section title={t('home.continueListening')}>
           <CardGrid items={recent.map((entry) => entry.media)} onPlay={playMedia} onToggleFavorite={toggleFavorite} />
         </Section>
       )}
 
       {favorites.length > 0 && (
-        <Section title="Favorites">
+        <Section title={t('home.favorites')}>
           <CardGrid items={favorites.slice(0, 10)} onPlay={playMedia} onToggleFavorite={toggleFavorite} />
         </Section>
       )}
 
-      <Section title="Recently added">
+      <Section title={t('home.recentlyAdded')}>
         {recentlyAdded.length > 0 ? (
           <CardGrid items={recentlyAdded} onPlay={playMedia} onToggleFavorite={toggleFavorite} />
         ) : (
-          <EmptyState icon={LayoutGrid} title="Nothing here yet" />
+          <EmptyState icon={LayoutGrid} title={t('empty.nothingHereYet')} />
         )}
       </Section>
     </div>

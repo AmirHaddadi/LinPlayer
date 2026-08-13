@@ -1,8 +1,10 @@
 import { Music2 } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { useLibraryStore } from '@renderer/stores/libraryStore'
 import { MediaCollection } from './MediaCollection'
 
 export function MusicScreen(): JSX.Element {
+  const { t } = useTranslation()
   const items = useLibraryStore((s) => s.items)
   const searchQuery = useLibraryStore((s) => s.searchQuery)
   const searchResults = useLibraryStore((s) => s.searchResults)
@@ -11,11 +13,11 @@ export function MusicScreen(): JSX.Element {
 
   return (
     <MediaCollection
-      title="Music"
+      title={t('library.music')}
       items={audioItems}
       emptyIcon={Music2}
-      emptyTitle="No music yet"
-      emptyDescription="Open audio files or scan a folder to build your music library."
+      emptyTitle={t('empty.musicTitle')}
+      emptyDescription={t('empty.musicDescription')}
     />
   )
 }

@@ -1,6 +1,6 @@
 {
   "name": "linplayer",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A beautiful, fast, modern and privacy-friendly media player built specifically for Linux.",
   "author": {
     "name": "LinPlayer Contributors",
@@ -37,10 +37,12 @@
     "better-sqlite3": "^11.9.1",
     "ffprobe-static": "^3.1.0",
     "fluent-ffmpeg": "^2.1.3",
+    "i18next": "^26.3.6",
     "lucide-react": "^0.475.0",
     "music-metadata": "^10.6.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-i18next": "^17.0.11",
     "zustand": "^4.5.5"
   },
   "devDependencies": {

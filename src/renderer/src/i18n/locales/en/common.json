@@ -1,0 +1,183 @@
+{
+  "app": {
+    "name": "LinPlayer"
+  },
+  "nav": {
+    "home": "Home",
+    "music": "Music",
+    "videos": "Videos",
+    "favorites": "Favorites",
+    "history": "History",
+    "playlists": "Playlists",
+    "newPlaylist": "New playlist",
+    "playlistNamePlaceholder": "Playlist name"
+  },
+  "topbar": {
+    "searchPlaceholder": "Search your library…",
+    "clearSearch": "Clear search",
+    "settings": "Settings",
+    "minimize": "Minimize",
+    "maximize": "Maximize",
+    "close": "Close"
+  },
+  "actions": {
+    "play": "Play",
+    "playAll": "Play all",
+    "pause": "Pause",
+    "previous": "Previous",
+    "next": "Next",
+    "shuffle": "Shuffle",
+    "repeat": "Repeat: {{mode}}",
+    "mute": "Mute",
+    "unmute": "Unmute",
+    "volume": "Volume",
+    "fullscreen": "Fullscreen",
+    "queue": "Queue",
+    "openFile": "Open file",
+    "scanFolder": "Scan folder",
+    "addToFavorites": "Add to favorites",
+    "removeFromFavorites": "Remove from favorites",
+    "addTo": "Add to {{name}}",
+    "rename": "Rename",
+    "delete": "Delete",
+    "deletePlaylist": "Delete playlist",
+    "removeFromPlaylist": "Remove from playlist",
+    "gridView": "Grid view",
+    "listView": "List view",
+    "close": "Close",
+    "closeQueue": "Close queue",
+    "clearHistory": "Clear history",
+    "addLibraryFolder": "Add library folder",
+    "removeFolder": "Remove folder",
+    "cleanUpNow": "Clean up now",
+    "reset": "Reset",
+    "enable": "Enable",
+    "disable": "Disable"
+  },
+  "home": {
+    "welcome": "Welcome back",
+    "continueListening": "Continue listening",
+    "favorites": "Favorites",
+    "recentlyAdded": "Recently added"
+  },
+  "library": {
+    "music": "Music",
+    "videos": "Videos",
+    "scanningProgress": "Scanning… {{count}} found"
+  },
+  "playlist": {
+    "notFound": "Playlist not found",
+    "trackCount_one": "{{count}} track",
+    "trackCount_other": "{{count}} tracks"
+  },
+  "player": {
+    "nothingPlaying": "Nothing playing",
+    "nothingPlayingTitle": "Nothing is playing",
+    "nothingPlayingDescription": "Pick something from your library to get started.",
+    "unknownArtist": "Unknown artist"
+  },
+  "queue": {
+    "title": "Queue",
+    "empty": "Queue is empty."
+  },
+  "repeat": {
+    "off": "off",
+    "all": "all",
+    "one": "one"
+  },
+  "empty": {
+    "libraryTitle": "Your library is empty",
+    "libraryDescription": "Open a file or scan a folder to start building your LinPlayer library.",
+    "musicTitle": "No music yet",
+    "musicDescription": "Open audio files or scan a folder to build your music library.",
+    "videosTitle": "No videos yet",
+    "videosDescription": "Open video files or scan a folder to build your video library.",
+    "favoritesTitle": "No favorites yet",
+    "favoritesDescription": "Tap the heart icon on any track or video to add it here.",
+    "historyTitle": "No playback history yet",
+    "historyDescription": "Media you play will show up here.",
+    "playlistsTitle": "No playlists yet",
+    "playlistsDescription": "Create a playlist to start organizing your media.",
+    "playlistEmptyTitle": "This playlist is empty",
+    "playlistEmptyDescription": "Add media from your library via the right-click menu.",
+    "nothingHereYet": "Nothing here yet"
+  },
+  "toast": {
+    "openedFiles_one": "Opened {{count}} file.",
+    "openedFiles_other": "Opened {{count}} files.",
+    "importedFiles_one": "Imported {{count}} file.",
+    "importedFiles_other": "Imported {{count}} files.",
+    "importFailed": "Some dropped items could not be imported.",
+    "scanningFolder": "Scanning folder for media…",
+    "removedMissing_one": "Removed {{count}} missing file from the library.",
+    "removedMissing_other": "Removed {{count}} missing files from the library.",
+    "playbackFailed": "Playback failed — unsupported format or codec."
+  },
+  "errors": {
+    "playbackUnsupported": "Unable to play this file. The format or codec may not be supported."
+  },
+  "dragDrop": {
+    "prompt": "Drop media files or folders to import"
+  },
+  "settings": {
+    "title": "Settings",
+    "sections": {
+      "appearance": "Appearance",
+      "playback": "Playback",
+      "audio": "Audio",
+      "library": "Library",
+      "general": "General",
+      "keyboard": "Keyboard",
+      "about": "About"
+    },
+    "appearance": {
+      "theme": "Theme",
+      "themeDark": "Dark",
+      "themeLight": "Light",
+      "themeSystem": "System",
+      "language": "Language",
+      "languageEnglish": "English",
+      "languagePersian": "فارسی",
+      "reducedMotion": "Reduce motion"
+    },
+    "playback": {
+      "rememberPosition": "Remember playback position",
+      "defaultVolume": "Default volume",
+      "playbackSpeed": "Playback speed",
+      "resumeBehavior": "Resume behavior",
+      "resumeAlways": "Always resume",
+      "resumeAsk": "Ask each time",
+      "resumeNever": "Never resume"
+    },
+    "audio": {
+      "equalizer": "Equalizer",
+      "equalizerEnable": "Enable equalizer",
+      "preset": "Preset",
+      "visualizer": "Visualizer",
+      "visualizerEnable": "Show audio visualizer"
+    },
+    "library": {
+      "noFolders": "No folders added yet.",
+      "scanOnStartup": "Automatically scan on startup",
+      "removeMissing": "Remove missing files from library"
+    },
+    "general": {
+      "startMinimized": "Start minimized",
+      "rememberWindowSize": "Remember window size",
+      "rememberWindowPosition": "Remember window position"
+    }
+  },
+  "equalizer": {
+    "title": "Equalizer",
+    "presets": {
+      "flat": "Flat",
+      "bassBoost": "Bass Boost",
+      "trebleBoost": "Treble Boost",
+      "vocal": "Vocal",
+      "rock": "Rock",
+      "classical": "Classical",
+      "electronic": "Electronic",
+      "custom": "Custom"
+    }
+  }
+}

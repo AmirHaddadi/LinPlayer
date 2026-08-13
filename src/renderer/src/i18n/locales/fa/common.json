@@ -1,0 +1,183 @@
+{
+  "app": {
+    "name": "لین‌پلیر"
+  },
+  "nav": {
+    "home": "خانه",
+    "music": "موسیقی",
+    "videos": "ویدیوها",
+    "favorites": "موردعلاقه‌ها",
+    "history": "تاریخچه",
+    "playlists": "فهرست‌های پخش",
+    "newPlaylist": "فهرست پخش جدید",
+    "playlistNamePlaceholder": "نام فهرست پخش"
+  },
+  "topbar": {
+    "searchPlaceholder": "جستجو در کتابخانه…",
+    "clearSearch": "پاک کردن جستجو",
+    "settings": "تنظیمات",
+    "minimize": "کوچک کردن",
+    "maximize": "بزرگ کردن",
+    "close": "بستن"
+  },
+  "actions": {
+    "play": "پخش",
+    "playAll": "پخش همه",
+    "pause": "توقف موقت",
+    "previous": "قبلی",
+    "next": "بعدی",
+    "shuffle": "پخش تصادفی",
+    "repeat": "تکرار: {{mode}}",
+    "mute": "بی‌صدا",
+    "unmute": "باصدا",
+    "volume": "میزان صدا",
+    "fullscreen": "تمام‌صفحه",
+    "queue": "صف پخش",
+    "openFile": "باز کردن فایل",
+    "scanFolder": "اسکن پوشه",
+    "addToFavorites": "افزودن به موردعلاقه‌ها",
+    "removeFromFavorites": "حذف از موردعلاقه‌ها",
+    "addTo": "افزودن به {{name}}",
+    "rename": "تغییر نام",
+    "delete": "حذف",
+    "deletePlaylist": "حذف فهرست پخش",
+    "removeFromPlaylist": "حذف از فهرست پخش",
+    "gridView": "نمای شبکه‌ای",
+    "listView": "نمای فهرستی",
+    "close": "بستن",
+    "closeQueue": "بستن صف پخش",
+    "clearHistory": "پاک کردن تاریخچه",
+    "addLibraryFolder": "افزودن پوشه کتابخانه",
+    "removeFolder": "حذف پوشه",
+    "cleanUpNow": "پاک‌سازی اکنون",
+    "reset": "بازنشانی",
+    "enable": "فعال‌سازی",
+    "disable": "غیرفعال‌سازی"
+  },
+  "home": {
+    "welcome": "خوش آمدید",
+    "continueListening": "ادامه شنیدن",
+    "favorites": "موردعلاقه‌ها",
+    "recentlyAdded": "به‌تازگی افزوده‌شده"
+  },
+  "library": {
+    "music": "موسیقی",
+    "videos": "ویدیوها",
+    "scanningProgress": "در حال اسکن… {{count}} یافت‌شده"
+  },
+  "playlist": {
+    "notFound": "فهرست پخش پیدا نشد",
+    "trackCount_one": "{{count}} قطعه",
+    "trackCount_other": "{{count}} قطعه"
+  },
+  "player": {
+    "nothingPlaying": "چیزی در حال پخش نیست",
+    "nothingPlayingTitle": "چیزی در حال پخش نیست",
+    "nothingPlayingDescription": "برای شروع، چیزی از کتابخانه‌تان انتخاب کنید.",
+    "unknownArtist": "هنرمند نامشخص"
+  },
+  "queue": {
+    "title": "صف پخش",
+    "empty": "صف پخش خالی است."
+  },
+  "repeat": {
+    "off": "خاموش",
+    "all": "همه",
+    "one": "یکی"
+  },
+  "empty": {
+    "libraryTitle": "کتابخانه‌تان خالی است",
+    "libraryDescription": "برای شروع، یک فایل باز کنید یا یک پوشه را اسکن کنید.",
+    "musicTitle": "هنوز موسیقی‌ای اضافه نشده",
+    "musicDescription": "فایل‌های صوتی را باز کنید یا یک پوشه را اسکن کنید تا کتابخانه موسیقی‌تان ساخته شود.",
+    "videosTitle": "هنوز ویدیویی اضافه نشده",
+    "videosDescription": "فایل‌های ویدیویی را باز کنید یا یک پوشه را اسکن کنید تا کتابخانه ویدیوی‌تان ساخته شود.",
+    "favoritesTitle": "هنوز موردعلاقه‌ای ندارید",
+    "favoritesDescription": "روی آیکون قلب هر قطعه یا ویدیو بزنید تا اینجا اضافه شود.",
+    "historyTitle": "هنوز چیزی پخش نشده است",
+    "historyDescription": "رسانه‌هایی که پخش می‌کنید اینجا نمایش داده می‌شوند.",
+    "playlistsTitle": "هنوز فهرست پخشی ساخته نشده",
+    "playlistsDescription": "یک فهرست پخش بسازید تا رسانه‌هایتان را سازمان‌دهی کنید.",
+    "playlistEmptyTitle": "این فهرست پخش خالی است",
+    "playlistEmptyDescription": "از طریق کلیک راست روی رسانه‌ها، آن‌ها را به این فهرست اضافه کنید.",
+    "nothingHereYet": "هنوز چیزی اینجا نیست"
+  },
+  "toast": {
+    "openedFiles_one": "{{count}} فایل باز شد.",
+    "openedFiles_other": "{{count}} فایل باز شد.",
+    "importedFiles_one": "{{count}} فایل وارد شد.",
+    "importedFiles_other": "{{count}} فایل وارد شد.",
+    "importFailed": "برخی موارد رهاشده وارد نشدند.",
+    "scanningFolder": "در حال اسکن پوشه برای یافتن رسانه…",
+    "removedMissing_one": "{{count}} فایل گم‌شده از کتابخانه حذف شد.",
+    "removedMissing_other": "{{count}} فایل گم‌شده از کتابخانه حذف شد.",
+    "playbackFailed": "پخش ناموفق بود — فرمت یا کدک پشتیبانی نمی‌شود."
+  },
+  "errors": {
+    "playbackUnsupported": "پخش این فایل ممکن نیست. ممکن است فرمت یا کدک آن پشتیبانی نشود."
+  },
+  "dragDrop": {
+    "prompt": "فایل‌ها یا پوشه‌های رسانه را برای وارد کردن اینجا رها کنید"
+  },
+  "settings": {
+    "title": "تنظیمات",
+    "sections": {
+      "appearance": "ظاهر",
+      "playback": "پخش",
+      "audio": "صدا",
+      "library": "کتابخانه",
+      "general": "عمومی",
+      "keyboard": "صفحه‌کلید",
+      "about": "درباره"
+    },
+    "appearance": {
+      "theme": "پوسته",
+      "themeDark": "تیره",
+      "themeLight": "روشن",
+      "themeSystem": "سیستم",
+      "language": "زبان",
+      "languageEnglish": "English",
+      "languagePersian": "فارسی",
+      "reducedMotion": "کاهش انیمیشن‌ها"
+    },
+    "playback": {
+      "rememberPosition": "به‌خاطر سپردن موقعیت پخش",
+      "defaultVolume": "میزان صدای پیش‌فرض",
+      "playbackSpeed": "سرعت پخش",
+      "resumeBehavior": "رفتار ادامه پخش",
+      "resumeAlways": "همیشه ادامه بده",
+      "resumeAsk": "هر بار بپرس",
+      "resumeNever": "هرگز ادامه نده"
+    },
+    "audio": {
+      "equalizer": "اکولایزر",
+      "equalizerEnable": "فعال‌سازی اکولایزر",
+      "preset": "پیش‌تنظیم",
+      "visualizer": "نمایش‌گر صوتی",
+      "visualizerEnable": "نمایش تجسم صوتی"
+    },
+    "library": {
+      "noFolders": "هنوز پوشه‌ای اضافه نشده است.",
+      "scanOnStartup": "اسکن خودکار هنگام اجرا",
+      "removeMissing": "حذف فایل‌های گم‌شده از کتابخانه"
+    },
+    "general": {
+      "startMinimized": "شروع به‌صورت کوچک‌شده",
+      "rememberWindowSize": "به‌خاطر سپردن اندازه پنجره",
+      "rememberWindowPosition": "به‌خاطر سپردن موقعیت پنجره"
+    }
+  },
+  "equalizer": {
+    "title": "اکولایزر",
+    "presets": {
+      "flat": "خنثی",
+      "bassBoost": "تقویت باس",
+      "trebleBoost": "تقویت زیر",
+      "vocal": "صدای خواننده",
+      "rock": "راک",
+      "classical": "کلاسیک",
+      "electronic": "الکترونیک",
+      "custom": "سفارشی"
+    }
+  }
+}

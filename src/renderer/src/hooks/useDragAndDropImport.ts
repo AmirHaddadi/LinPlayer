@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useLibraryStore } from '@renderer/stores/libraryStore'
 import { useUiStore } from '@renderer/stores/uiStore'
 
@@ -9,6 +10,7 @@ interface DropHandlers {
 }
 
 export function useDragAndDropImport(): { isDraggingOver: boolean; dropHandlers: DropHandlers } {
+  const { t } = useTranslation()
   const [isDraggingOver, setIsDraggingOver] = useState(false)
   const loadItems = useLibraryStore((s) => s.loadItems)
   const pushToast = useUiStore((s) => s.pushToast)
@@ -39,12 +41,12 @@ export function useDragAndDropImport(): { isDraggingOver: boolean; dropHandlers:
         .then(async (opened) => {
           await loadItems()
           if (opened.length > 0) {
-            pushToast(`Imported ${opened.length} file${opened.length === 1 ? '' : 's'}.`, 'success')
+            pushToast(t('toast.importedFiles', { count: opened.length }), 'success')
           }
         })
-        .catch(() => pushToast('Some dropped items could not be imported.', 'error'))
+        .catch(() => pushToast(t('toast.importFailed'), 'error'))
     },
-    [loadItems, pushToast]
+    [loadItems, pushToast, t]
   )
 
   return { isDraggingOver, dropHandlers: { onDragOver, onDragLeave, onDrop } }

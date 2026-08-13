@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { Sidebar } from '@renderer/components/layout/Sidebar'
 import { TopBar } from '@renderer/components/layout/TopBar'
 import { PlayerBar } from '@renderer/components/player/PlayerBar'
@@ -9,6 +10,7 @@ import { useKeyboardShortcuts } from '@renderer/hooks/useKeyboardShortcuts'
 import { useDragAndDropImport } from '@renderer/hooks/useDragAndDropImport'
 
 export function AppShell(): JSX.Element {
+  const { t } = useTranslation()
   useKeyboardShortcuts()
   const { isDraggingOver, dropHandlers } = useDragAndDropImport()
 
@@ -21,7 +23,7 @@ export function AppShell(): JSX.Element {
           <ScreenRouter />
           {isDraggingOver && (
             <div className="pointer-events-none absolute inset-2 z-10 flex items-center justify-center rounded-xl border-2 border-dashed border-accent bg-accent/5">
-              <p className="text-sm font-medium text-accent">Drop media files or folders to import</p>
+              <p className="text-sm font-medium text-accent">{t('dragDrop.prompt')}</p>
             </div>
           )}
         </main>

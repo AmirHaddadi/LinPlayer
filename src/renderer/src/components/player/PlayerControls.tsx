@@ -1,8 +1,10 @@
 import { Pause, Play, Repeat, Repeat1, Shuffle, SkipBack, SkipForward } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { IconButton } from '@renderer/components/common/IconButton'
 import { usePlayerStore } from '@renderer/stores/playerStore'
 
 export function PlayerControls(): JSX.Element {
+  const { t } = useTranslation()
   const isPlaying = usePlayerStore((s) => s.isPlaying)
   const shuffle = usePlayerStore((s) => s.shuffle)
   const repeat = usePlayerStore((s) => s.repeat)
@@ -17,14 +19,14 @@ export function PlayerControls(): JSX.Element {
 
   return (
     <div className="flex items-center gap-1">
-      <IconButton label="Shuffle" size="sm" active={shuffle} onClick={toggleShuffle}>
+      <IconButton label={t('actions.shuffle')} size="sm" active={shuffle} onClick={toggleShuffle}>
         <Shuffle size={16} />
       </IconButton>
-      <IconButton label="Previous" onClick={previous} disabled={!current}>
+      <IconButton label={t('actions.previous')} onClick={previous} disabled={!current}>
         <SkipBack size={18} fill="currentColor" />
       </IconButton>
       <IconButton
-        label={isPlaying ? 'Pause' : 'Play'}
+        label={isPlaying ? t('actions.pause') : t('actions.play')}
         size="lg"
         onClick={togglePlay}
         disabled={!current}
@@ -32,10 +34,10 @@ export function PlayerControls(): JSX.Element {
       >
         {isPlaying ? <Pause size={20} fill="currentColor" /> : <Play size={20} fill="currentColor" className="ml-0.5" />}
       </IconButton>
-      <IconButton label="Next" onClick={next} disabled={!current}>
+      <IconButton label={t('actions.next')} onClick={next} disabled={!current}>
         <SkipForward size={18} fill="currentColor" />
       </IconButton>
-      <IconButton label={`Repeat: ${repeat}`} size="sm" active={repeat !== 'off'} onClick={cycleRepeat}>
+      <IconButton label={t('actions.repeat', { mode: t(`repeat.${repeat}`) })} size="sm" active={repeat !== 'off'} onClick={cycleRepeat}>
         <RepeatIcon size={16} />
       </IconButton>
     </div>

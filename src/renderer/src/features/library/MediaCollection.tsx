@@ -1,9 +1,11 @@
 import { LayoutGrid, List } from 'lucide-react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { MediaCard } from '@renderer/components/media/MediaCard'
 import { MediaRow } from '@renderer/components/media/MediaRow'
 import { ContextMenu, type ContextMenuItem } from '@renderer/components/common/ContextMenu'
 import { EmptyState } from '@renderer/components/common/EmptyState'
+import { LoadingState } from '@renderer/components/common/LoadingState'
 import { IconButton } from '@renderer/components/common/IconButton'
 import { usePlayMedia } from '@renderer/hooks/usePlayMedia'
 import { useLibraryStore } from '@renderer/stores/libraryStore'
@@ -23,6 +25,8 @@ interface MediaCollectionProps {
 }
 
 export function MediaCollection({ title, items, emptyIcon, emptyTitle, emptyDescription }: MediaCollectionProps): JSX.Element {
+  const { t } = useTranslation()
+  const isLibraryLoading = useLibraryStore((s) => s.isLoading)
   const viewMode = useUiStore((s) => s.viewMode)
   const setViewMode = useUiStore((s) => s.setViewMode)
   const toggleFavorite = useLibraryStore((s) => s.toggleFavorite)
@@ -39,13 +43,13 @@ export function MediaCollection({ title, items, emptyIcon, emptyTitle, emptyDesc
 
   const menuItems: ContextMenuItem[] = menu
     ? [
-        { label: 'Play', onSelect: () => playMedia(menu.item, items, items.indexOf(menu.item)) },
+        { label: t('actions.play'), onSelect: () => playMedia(menu.item, items, items.indexOf(menu.item)) },
         {
-          label: menu.item.favorite ? 'Remove from favorites' : 'Add to favorites',
+          label: menu.item.favorite ? t('actions.removeFromFavorites') : t('actions.addToFavorites'),
           onSelect: () => toggleFavorite(menu.item.id)
         },
         ...playlists.map((playlist) => ({
-          label: `Add to ${playlist.name}`,
+          label: t('actions.addTo', { name: playlist.name }),
           onSelect: () => addItem(playlist.id, menu.item.id)
         }))
       ]
@@ -56,16 +60,18 @@ export function MediaCollection({ title, items, emptyIcon, emptyTitle, emptyDesc
       <div className="mb-4 flex items-center justify-between">
         <h1 className="text-xl font-semibold text-base-100">{title}</h1>
         <div className="flex items-center gap-1 rounded-lg border border-base-700 p-0.5">
-          <IconButton label="Grid view" size="sm" active={viewMode === 'grid'} onClick={() => setViewMode('grid')}>
+          <IconButton label={t('actions.gridView')} size="sm" active={viewMode === 'grid'} onClick={() => setViewMode('grid')}>
             <LayoutGrid size={15} />
           </IconButton>
-          <IconButton label="List view" size="sm" active={viewMode === 'list'} onClick={() => setViewMode('list')}>
+          <IconButton label={t('actions.listView')} size="sm" active={viewMode === 'list'} onClick={() => setViewMode('list')}>
             <List size={15} />
           </IconButton>
         </div>
       </div>
 
-      {items.length === 0 ? (
+      {items.length === 0 && isLibraryLoading ? (
+        <LoadingState />
+      ) : items.length === 0 ? (
         <EmptyState icon={emptyIcon} title={emptyTitle} description={emptyDescription} />
       ) : viewMode === 'grid' ? (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-1">

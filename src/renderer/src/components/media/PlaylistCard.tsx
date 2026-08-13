@@ -1,4 +1,5 @@
 import { ListMusic } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import type { Playlist } from '@shared/types/playlist'
 
 interface PlaylistCardProps {
@@ -8,6 +9,8 @@ interface PlaylistCardProps {
 }
 
 export function PlaylistCard({ playlist, onOpen, onContextMenu }: PlaylistCardProps): JSX.Element {
+  const { t } = useTranslation()
+
   return (
     <button
       onClick={onOpen}
@@ -18,9 +21,7 @@ export function PlaylistCard({ playlist, onOpen, onContextMenu }: PlaylistCardPr
         <ListMusic size={40} strokeWidth={1.25} />
       </div>
       <p className="mt-2.5 truncate text-sm font-medium text-base-100 w-full">{playlist.name}</p>
-      <p className="truncate text-xs text-base-400">
-        {playlist.itemCount} {playlist.itemCount === 1 ? 'track' : 'tracks'}
-      </p>
+      <p className="truncate text-xs text-base-400">{t('playlist.trackCount', { count: playlist.itemCount })}</p>
     </button>
   )
 }

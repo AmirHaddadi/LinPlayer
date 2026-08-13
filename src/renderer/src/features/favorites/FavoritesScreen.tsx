@@ -1,17 +1,19 @@
 import { Heart } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { useLibraryStore } from '@renderer/stores/libraryStore'
 import { MediaCollection } from '@renderer/features/library/MediaCollection'
 
 export function FavoritesScreen(): JSX.Element {
+  const { t } = useTranslation()
   const favorites = useLibraryStore((s) => s.favorites)
 
   return (
     <MediaCollection
-      title="Favorites"
+      title={t('nav.favorites')}
       items={favorites}
       emptyIcon={Heart}
-      emptyTitle="No favorites yet"
-      emptyDescription="Tap the heart icon on any track or video to add it here."
+      emptyTitle={t('empty.favoritesTitle')}
+      emptyDescription={t('empty.favoritesDescription')}
     />
   )
 }

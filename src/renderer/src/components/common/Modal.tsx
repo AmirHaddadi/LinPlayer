@@ -1,5 +1,6 @@
 import { type ReactNode, useEffect } from 'react'
 import { X } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { IconButton } from './IconButton'
 
 interface ModalProps {
@@ -11,6 +12,7 @@ interface ModalProps {
 }
 
 export function Modal({ open, onClose, title, children, footer }: ModalProps): JSX.Element | null {
+  const { t } = useTranslation()
   useEffect(() => {
     if (!open) return
     const onKeyDown = (event: KeyboardEvent): void => {
@@ -35,7 +37,7 @@ export function Modal({ open, onClose, title, children, footer }: ModalProps): J
           <h2 id="modal-title" className="text-sm font-semibold text-base-100">
             {title}
           </h2>
-          <IconButton label="Close" onClick={onClose} size="sm">
+          <IconButton label={t('actions.close')} onClick={onClose} size="sm">
             <X size={16} />
           </IconButton>
         </div>
