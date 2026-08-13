@@ -1,11 +1,19 @@
 import { Folder, Trash2 } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { useSettingsStore } from '@renderer/stores/settingsStore'
 import { useLibraryStore } from '@renderer/stores/libraryStore'
 import { useUiStore } from '@renderer/stores/uiStore'
 import { Button } from '@renderer/components/common/Button'
 import { IconButton } from '@renderer/components/common/IconButton'
+import { LinSwitch } from '@renderer/components/common/LinSwitch'
+import { LinSelect } from '@renderer/components/common/LinSelect'
+import { LinSlider } from '@renderer/components/common/LinSlider'
+import type { AppLanguage, AppearanceTheme, EqualizerPresetName, ResumeBehavior } from '@shared/types/settings'
+import { EQUALIZER_PRESETS } from '@renderer/features/equalizer/presets'
+import { EqualizerPanel } from '@renderer/features/equalizer/EqualizerPanel'
 
 export function SettingsScreen(): JSX.Element {
+  const { t } = useTranslation()
   const settings = useSettingsStore((s) => s.settings)
   const update = useSettingsStore((s) => s.update)
   const folders = useLibraryStore((s) => s.folders)
@@ -23,114 +31,180 @@ export function SettingsScreen(): JSX.Element {
 
   const handleRemoveMissing = async (): Promise<void> => {
     const removed = await window.linplayer.library.removeMissing()
-    pushToast(`Removed ${removed} missing file${removed === 1 ? '' : 's'} from the library.`, 'info')
+    pushToast(t('toast.removedMissing', { count: removed }), 'info')
     await useLibraryStore.getState().loadItems()
   }
 
   return (
-    <div className="mx-auto max-w-2xl px-6 py-6 space-y-8">
-      <h1 className="text-xl font-semibold text-base-100">Settings</h1>
+    <div className="mx-auto max-w-2xl px-6 py-6 space-y-6">
+      <h1 className="text-xl font-semibold text-base-100">{t('settings.title')}</h1>
 
-      <SettingsSection title="Appearance">
-        <Field label="Theme">
-          <Select
+      <SettingsSection title={t('settings.sections.appearance')}>
+        <SettingRow title={t('settings.appearance.theme')}>
+          <LinSelect
             value={settings.appearance.theme}
-            onChange={(value) => update('appearance', { theme: value as 'dark' | 'light' | 'system' })}
+            onChange={(value) => update('appearance', { ...settings.appearance, theme: value as AppearanceTheme })}
+            label={t('settings.appearance.theme')}
             options={[
-              { value: 'dark', label: 'Dark' },
-              { value: 'light', label: 'Light' },
-              { value: 'system', label: 'System' }
+              { value: 'dark', label: t('settings.appearance.themeDark') },
+              { value: 'light', label: t('settings.appearance.themeLight') },
+              { value: 'system', label: t('settings.appearance.themeSystem') }
             ]}
           />
-        </Field>
+        </SettingRow>
+        <SettingRow title={t('settings.appearance.language')}>
+          <LinSelect
+            value={settings.appearance.language}
+            onChange={(value) => update('appearance', { ...settings.appearance, language: value as AppLanguage })}
+            label={t('settings.appearance.language')}
+            options={[
+              { value: 'en', label: t('settings.appearance.languageEnglish') },
+              { value: 'fa', label: t('settings.appearance.languagePersian') }
+            ]}
+          />
+        </SettingRow>
+        <SettingRow title={t('settings.appearance.reducedMotion')}>
+          <LinSwitch
+            label={t('settings.appearance.reducedMotion')}
+            checked={settings.appearance.reducedMotion}
+            onChange={(checked) => update('appearance', { ...settings.appearance, reducedMotion: checked })}
+          />
+        </SettingRow>
       </SettingsSection>
 
-      <SettingsSection title="Playback">
-        <Toggle
-          label="Remember playback position"
-          checked={settings.playback.rememberPosition}
-          onChange={(checked) => update('playback', { ...settings.playback, rememberPosition: checked })}
-        />
-        <Field label="Default volume">
-          <input
-            type="range"
+      <SettingsSection title={t('settings.sections.playback')}>
+        <SettingRow title={t('settings.playback.rememberPosition')}>
+          <LinSwitch
+            label={t('settings.playback.rememberPosition')}
+            checked={settings.playback.rememberPosition}
+            onChange={(checked) => update('playback', { ...settings.playback, rememberPosition: checked })}
+          />
+        </SettingRow>
+        <SettingRow title={t('settings.playback.defaultVolume')}>
+          <LinSlider
+            label={t('settings.playback.defaultVolume')}
             min={0}
             max={1}
             step={0.01}
             value={settings.playback.defaultVolume}
-            onChange={(e) => update('playback', { ...settings.playback, defaultVolume: Number(e.target.value) })}
-            className="w-40 accent-accent"
+            onChange={(value) => update('playback', { ...settings.playback, defaultVolume: value })}
+            className="w-32"
+            formatValue={(v) => `${Math.round(v * 100)}%`}
           />
-        </Field>
-        <Field label="Playback speed">
-          <Select
+        </SettingRow>
+        <SettingRow title={t('settings.playback.playbackSpeed')}>
+          <LinSelect
             value={String(settings.playback.playbackSpeed)}
             onChange={(value) => update('playback', { ...settings.playback, playbackSpeed: Number(value) })}
+            label={t('settings.playback.playbackSpeed')}
             options={[0.5, 0.75, 1, 1.25, 1.5, 2].map((v) => ({ value: String(v), label: `${v}x` }))}
           />
-        </Field>
-        <Field label="Resume behavior">
-          <Select
+        </SettingRow>
+        <SettingRow title={t('settings.playback.resumeBehavior')}>
+          <LinSelect
             value={settings.playback.resumeBehavior}
             onChange={(value) =>
-              update('playback', { ...settings.playback, resumeBehavior: value as 'always' | 'ask' | 'never' })
+              update('playback', { ...settings.playback, resumeBehavior: value as ResumeBehavior })
             }
+            label={t('settings.playback.resumeBehavior')}
             options={[
-              { value: 'always', label: 'Always resume' },
-              { value: 'ask', label: 'Ask each time' },
-              { value: 'never', label: 'Never resume' }
+              { value: 'always', label: t('settings.playback.resumeAlways') },
+              { value: 'ask', label: t('settings.playback.resumeAsk') },
+              { value: 'never', label: t('settings.playback.resumeNever') }
             ]}
           />
-        </Field>
+        </SettingRow>
       </SettingsSection>
 
-      <SettingsSection title="Library">
+      <SettingsSection title={t('settings.sections.audio')}>
+        <SettingRow title={t('settings.audio.equalizerEnable')}>
+          <LinSwitch
+            label={t('settings.audio.equalizerEnable')}
+            checked={settings.audio.equalizerEnabled}
+            onChange={(checked) => update('audio', { ...settings.audio, equalizerEnabled: checked })}
+          />
+        </SettingRow>
+        <SettingRow title={t('settings.audio.preset')}>
+          <LinSelect
+            value={settings.audio.equalizerPreset}
+            onChange={(value) =>
+              update('audio', {
+                ...settings.audio,
+                equalizerPreset: value as EqualizerPresetName,
+                equalizerGains: EQUALIZER_PRESETS[value as EqualizerPresetName] ?? settings.audio.equalizerGains
+              })
+            }
+            label={t('settings.audio.preset')}
+            options={Object.keys(EQUALIZER_PRESETS).map((key) => ({
+              value: key,
+              label: t(`equalizer.presets.${key}`)
+            }))}
+          />
+        </SettingRow>
+        <SettingRow title={t('settings.audio.visualizerEnable')}>
+          <LinSwitch
+            label={t('settings.audio.visualizerEnable')}
+            checked={settings.audio.visualizerEnabled}
+            onChange={(checked) => update('audio', { ...settings.audio, visualizerEnabled: checked })}
+          />
+        </SettingRow>
+        {settings.audio.equalizerEnabled && <EqualizerPanel />}
+      </SettingsSection>
+
+      <SettingsSection title={t('settings.sections.library')}>
         <div className="space-y-1.5">
-          {folders.length === 0 && <p className="text-sm text-base-500">No folders added yet.</p>}
+          {folders.length === 0 && <p className="text-sm text-base-500">{t('settings.library.noFolders')}</p>}
           {folders.map((folder) => (
-            <div key={folder.id} className="flex items-center justify-between rounded-md border border-base-800 px-3 py-2">
+            <div key={folder.id} className="flex min-w-0 items-center justify-between rounded-md border border-base-800 px-3 py-2">
               <div className="flex min-w-0 items-center gap-2">
                 <Folder size={14} className="shrink-0 text-base-400" />
                 <span className="truncate text-sm text-base-200">{folder.path}</span>
               </div>
-              <IconButton label="Remove folder" size="sm" onClick={() => removeFolder(folder.id)}>
+              <IconButton label={t('actions.removeFolder')} size="sm" onClick={() => removeFolder(folder.id)}>
                 <Trash2 size={14} />
               </IconButton>
             </div>
           ))}
         </div>
         <Button variant="secondary" size="sm" onClick={handleAddFolder}>
-          Add library folder
+          {t('actions.addLibraryFolder')}
         </Button>
-        <Toggle
-          label="Automatically scan on startup"
-          checked={settings.library.scanOnStartup}
-          onChange={(checked) => update('library', { ...settings.library, scanOnStartup: checked })}
-        />
-        <div className="flex items-center justify-between">
-          <p className="text-sm text-base-300">Remove missing files from library</p>
+        <SettingRow title={t('settings.library.scanOnStartup')}>
+          <LinSwitch
+            label={t('settings.library.scanOnStartup')}
+            checked={settings.library.scanOnStartup}
+            onChange={(checked) => update('library', { ...settings.library, scanOnStartup: checked })}
+          />
+        </SettingRow>
+        <SettingRow title={t('settings.library.removeMissing')}>
           <Button variant="secondary" size="sm" onClick={handleRemoveMissing}>
-            Clean up now
+            {t('actions.cleanUpNow')}
           </Button>
-        </div>
+        </SettingRow>
       </SettingsSection>
 
-      <SettingsSection title="General">
-        <Toggle
-          label="Start minimized"
-          checked={settings.general.startMinimized}
-          onChange={(checked) => update('general', { ...settings.general, startMinimized: checked })}
-        />
-        <Toggle
-          label="Remember window size"
-          checked={settings.general.rememberWindowSize}
-          onChange={(checked) => update('general', { ...settings.general, rememberWindowSize: checked })}
-        />
-        <Toggle
-          label="Remember window position"
-          checked={settings.general.rememberWindowPosition}
-          onChange={(checked) => update('general', { ...settings.general, rememberWindowPosition: checked })}
-        />
+      <SettingsSection title={t('settings.sections.general')}>
+        <SettingRow title={t('settings.general.startMinimized')}>
+          <LinSwitch
+            label={t('settings.general.startMinimized')}
+            checked={settings.general.startMinimized}
+            onChange={(checked) => update('general', { ...settings.general, startMinimized: checked })}
+          />
+        </SettingRow>
+        <SettingRow title={t('settings.general.rememberWindowSize')}>
+          <LinSwitch
+            label={t('settings.general.rememberWindowSize')}
+            checked={settings.general.rememberWindowSize}
+            onChange={(checked) => update('general', { ...settings.general, rememberWindowSize: checked })}
+          />
+        </SettingRow>
+        <SettingRow title={t('settings.general.rememberWindowPosition')}>
+          <LinSwitch
+            label={t('settings.general.rememberWindowPosition')}
+            checked={settings.general.rememberWindowPosition}
+            onChange={(checked) => update('general', { ...settings.general, rememberWindowPosition: checked })}
+          />
+        </SettingRow>
       </SettingsSection>
     </div>
   )
@@ -138,69 +212,18 @@ export function SettingsScreen(): JSX.Element {
 
 function SettingsSection({ title, children }: { title: string; children: React.ReactNode }): JSX.Element {
   return (
-    <section className="space-y-3 rounded-xl border border-base-800 bg-base-900/40 p-5">
+    <section className="min-w-0 space-y-3 rounded-xl border border-base-800 bg-base-900/40 p-5">
       <h2 className="text-sm font-semibold text-base-100">{title}</h2>
       <div className="space-y-3">{children}</div>
     </section>
   )
 }
 
-function Field({ label, children }: { label: string; children: React.ReactNode }): JSX.Element {
+function SettingRow({ title, children }: { title: string; children: React.ReactNode }): JSX.Element {
   return (
-    <div className="flex items-center justify-between">
-      <span className="text-sm text-base-300">{label}</span>
-      {children}
+    <div className="flex min-w-0 flex-wrap items-center justify-between gap-x-4 gap-y-2">
+      <span className="min-w-0 flex-1 text-sm text-base-300">{title}</span>
+      <div className="shrink-0">{children}</div>
     </div>
-  )
-}
-
-function Toggle({
-  label,
-  checked,
-  onChange
-}: {
-  label: string
-  checked: boolean
-  onChange: (checked: boolean) => void
-}): JSX.Element {
-  return (
-    <div className="flex items-center justify-between">
-      <span className="text-sm text-base-300">{label}</span>
-      <button
-        role="switch"
-        aria-checked={checked}
-        aria-label={label}
-        onClick={() => onChange(!checked)}
-        className={`relative h-5 w-9 rounded-full transition-colors ${checked ? 'bg-accent' : 'bg-base-700'}`}
-      >
-        <span
-          className={`absolute top-0.5 h-4 w-4 rounded-full bg-white transition-transform ${checked ? 'translate-x-4' : 'translate-x-0.5'}`}
-        />
-      </button>
-    </div>
-  )
-}
-
-function Select({
-  value,
-  onChange,
-  options
-}: {
-  value: string
-  onChange: (value: string) => void
-  options: { value: string; label: string }[]
-}): JSX.Element {
-  return (
-    <select
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      className="h-9 rounded-md border border-base-700 bg-base-900 px-2.5 text-sm text-base-100 outline-none focus:border-accent"
-    >
-      {options.map((option) => (
-        <option key={option.value} value={option.value}>
-          {option.label}
-        </option>
-      ))}
-    </select>
   )
 }

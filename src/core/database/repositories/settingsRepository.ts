@@ -24,6 +24,7 @@ export class SettingsRepository {
       ...stored,
       appearance: { ...DEFAULT_SETTINGS.appearance, ...(stored.appearance as object) },
       playback: { ...DEFAULT_SETTINGS.playback, ...(stored.playback as object) },
+      audio: { ...DEFAULT_SETTINGS.audio, ...(stored.audio as object) },
       library: { ...DEFAULT_SETTINGS.library, ...(stored.library as object) },
       general: { ...DEFAULT_SETTINGS.general, ...(stored.general as object) }
     } as AppSettings
