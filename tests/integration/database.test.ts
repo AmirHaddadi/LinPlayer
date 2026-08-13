@@ -106,6 +106,24 @@ describe('DatabaseService', () => {
     expect(db.settings.get('appearance').theme).toBe('dark')
   })
 
+  it('persists language/theme and equalizer settings independently', () => {
+    db.settings.set('appearance', { theme: 'light', language: 'fa', reducedMotion: true })
+    db.settings.set('audio', {
+      equalizerEnabled: true,
+      equalizerPreset: 'bassBoost',
+      equalizerGains: [6, 5, 3, 0, 0, 0, 0],
+      visualizerEnabled: false
+    })
+
+    const all = db.settings.getAll()
+    expect(all.appearance.language).toBe('fa')
+    expect(all.appearance.theme).toBe('light')
+    expect(all.audio.equalizerEnabled).toBe(true)
+    expect(all.audio.equalizerPreset).toBe('bassBoost')
+    // Playback settings untouched by the above writes still return defaults.
+    expect(all.playback.resumeBehavior).toBe('ask')
+  })
+
   it('records playback history and recent list survives repeated plays', () => {
     const track = db.media.upsertByPath('/music/a.mp3', 'a.mp3', 'audio', emptyMetadata, null)
     db.history.addEntry(track.id, 10)
