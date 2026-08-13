@@ -89,6 +89,13 @@ Renderer state is split into five focused Zustand stores
 - `settingsStore` — persisted app settings.
 - `uiStore` — navigation, view mode, toasts, queue panel visibility.
 
+## UI, theming, and localization
+
+See [`docs/ui.md`](ui.md) for the design token system, custom form
+controls (`LinSwitch`/`LinSelect`/`LinSlider`), and the single-active-media
+player fix, and [`docs/i18n.md`](i18n.md) for the English/Persian
+internationalization and RTL architecture.
+
 ## Known simplifications (see README "Known limitations")
 
 - Playback capability detection is best-effort (based on whether ffprobe

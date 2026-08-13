@@ -8,8 +8,8 @@
 
 ---
 
-> **Status:** early foundation (v0.1.0, pre-release). Core playback,
-> library, playlists, and packaging work end-to-end; see
+> **Status:** pre-release. Core playback, library, playlists, theming,
+> localization, and packaging work end-to-end; see
 > [Known limitations](#known-limitations) below before relying on it
 > day-to-day.
 
@@ -34,8 +34,20 @@ a variety of Linux desktop environments. None are included yet — see
 - 🔍 **Global search** across title, artist, album, genre, filename
 - ⌨️ **Keyboard shortcuts** and **drag & drop** file/folder import
 - 🎛 **Full playback controls** — shuffle, repeat, queue, playback speed,
-  volume, fullscreen video
-- 🌙 **Dark-first custom UI** — not a generic shadcn/ui demo
+  volume, fullscreen video, with exactly one media element ever active at
+  a time
+- 🖼 **Artwork** — embedded tags, folder-cover fallback (cover/folder/
+  album/front), content-addressable cache
+- 🎚 **Real equalizer** — 7-band Web Audio API graph with presets (Flat,
+  Bass Boost, Treble Boost, Vocal, Rock, Classical, Electronic)
+- 🌈 **Audio-reactive visualizer** — Canvas + AnalyserNode radial
+  spectrum, toggleable, disabled automatically when nothing is playing
+- 🌍 **English + Persian** UI, proper RTL layout (logical CSS properties,
+  not a blind mirror), and the Shabnam typeface for Persian
+- 🌗 **Dark & light themes** — single CSS-variable token system, both
+  themes fully supported (not just dark with a broken toggle)
+- 🎨 **Custom design system** — `LinSwitch`/`LinSelect`/`LinSlider`
+  instead of native browser controls, not a generic shadcn/ui demo
 - 🔒 **Secure by default** — sandboxed renderer, no direct Node/Electron
   access from the UI, no telemetry, fully offline
 - 🐧 **Linux-native packaging** — AppImage and `.deb` via electron-builder
@@ -102,9 +114,10 @@ Near-term, in rough priority order:
 1. Playback position resume (settings exist; wiring the "resume from last
    position" prompt into the player is not yet implemented)
 2. Automated E2E tests for the critical playback/playlist flows
-3. Equalizer and audio visualization
-4. Subtitle support (embedded + external `.srt`/`.vtt`)
-5. Multiple audio track selection
+3. Subtitle support (embedded + external `.srt`/`.vtt`)
+4. Multiple audio track selection
+5. Additional visualizer modes (wave, particles) beyond the current radial
+   spectrum
 6. Gapless playback and crossfade
 7. Smart playlists and watch folders
 8. MPRIS integration (Linux system media controls) and tray/mini player
@@ -119,21 +132,27 @@ rewrite.
 
 Read this before assuming everything "just works":
 
-- **Not yet run against a real display** in this environment — see the
-  latest development report for what was actually verified
-  (typecheck/lint/tests/build) versus what still needs manual
-  verification on a Linux desktop with a display.
+- **Not yet visually verified on a real display** in this environment
+  (headless container, no X server) — verified here means it boots, the
+  database initializes, and the process stays alive without errors under
+  Electron; layout/visual correctness on an actual Linux desktop still
+  needs a manual pass.
 - Playback capability detection is best-effort (based on whether ffprobe
   can read the file), not a guarantee every codec plays.
 - No subtitles, no multi-audio-track UI, no gapless/crossfade yet — these
   are architected for (see `docs/architecture.md`) but not implemented.
+- The equalizer has one fixed band layout and static presets; the
+  visualizer has one visual mode. Both are real (Web Audio API-backed),
+  just not configurable beyond that yet.
 - No automated E2E test suite yet (unit + integration tests only).
+- The `Shabnam.ttf` font's license was not verified as part of bundling
+  it — confirm redistribution terms before a public release.
 - The open-source license has **not** been finalized — see
   [LICENSE](LICENSE). Do not treat this as usable/distributable software
   until a real license is added.
-- AppImage/`.deb` packaging is configured but has only been exercised in
-  this environment to the extent described in the latest build report —
-  test on your actual distribution before relying on it.
+- AppImage/`.deb` packaging is configured and builds successfully, but has
+  only been smoke-tested headlessly in this environment — test on your
+  actual distribution before relying on it.
 
 ## Contributing
 
