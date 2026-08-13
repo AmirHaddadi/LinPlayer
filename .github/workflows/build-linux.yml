@@ -1,0 +1,38 @@
+name: Build Linux
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install Linux build dependencies
+        run: sudo apt-get update && sudo apt-get install -y libgtk-3-0 libnss3 libxss1 libasound2t64 || sudo apt-get install -y libasound2
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+
+      - name: Package AppImage & deb
+        run: npm run package
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: linplayer-linux
+          path: |
+            release/*.AppImage
+            release/*.deb
+          if-no-files-found: error

@@ -1,0 +1,18 @@
+LinPlayer — License Placeholder
+================================
+
+No open-source license has been finalized for this project yet.
+
+Until the repository maintainer chooses and commits an official license
+(e.g. MIT, Apache-2.0, GPL-3.0), this code is:
+
+  All rights reserved by the LinPlayer project maintainer.
+
+No permission is granted to copy, modify, distribute, or use this software
+until a license is added.
+
+ACTION REQUIRED BEFORE FIRST PUBLIC RELEASE:
+The maintainer must select an OSI-approved license appropriate for an
+open-source Linux desktop application (MIT and Apache-2.0 are common,
+permissive choices; GPL-3.0 is a common copyleft choice) and replace this
+file with the full license text.

@@ -1,0 +1,51 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install Linux build dependencies
+        run: sudo apt-get update && sudo apt-get install -y libgtk-3-0 libnss3 libxss1 libasound2t64 || sudo apt-get install -y libasound2
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint & typecheck
+        run: |
+          npm run lint
+          npm run typecheck
+
+      - name: Rebuild native modules for Node (tests run outside Electron)
+        run: npm rebuild better-sqlite3
+
+      - name: Run tests
+        run: npm run test
+
+      - name: Build application
+        run: npm run build
+
+      - name: Package Linux artifacts
+        run: npm run package
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            release/*.AppImage
+            release/*.deb
+          generate_release_notes: true
