@@ -16,11 +16,22 @@ export class ArtworkCache {
     await fs.mkdir(this.cacheDir, { recursive: true })
   }
 
-  async save(sourcePath: string, buffer: Uint8Array, mimeType: string | null): Promise<string> {
+  /**
+   * Cache key is a hash of the artwork bytes themselves (content-addressable),
+   * not the source media path — this way an album folder where every track
+   * shares the same embedded/folder cover only ever writes that image once.
+   */
+  async save(_sourcePath: string, buffer: Uint8Array, mimeType: string | null): Promise<string> {
     const ext = MIME_EXT[mimeType ?? ''] ?? '.jpg'
-    const hash = createHash('sha1').update(sourcePath).digest('hex')
+    const hash = createHash('sha1').update(buffer).digest('hex')
     const filePath = join(this.cacheDir, `${hash}${ext}`)
-    await fs.writeFile(filePath, buffer)
-    return filePath
+
+    try {
+      await fs.access(filePath)
+      return filePath
+    } catch {
+      await fs.writeFile(filePath, buffer)
+      return filePath
+    }
   }
 }

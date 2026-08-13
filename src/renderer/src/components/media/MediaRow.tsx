@@ -1,7 +1,9 @@
 import { Heart, Play } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { Artwork } from '@renderer/components/common/Artwork'
 import { formatDuration } from '@shared/utils/format'
 import { clsx } from '@renderer/utils/clsx'
+import { usePlayerStore } from '@renderer/stores/playerStore'
 import type { MediaItem } from '@shared/types/media'
 
 interface MediaRowProps {
@@ -14,6 +16,9 @@ interface MediaRowProps {
 }
 
 export function MediaRow({ item, index, active, onPlay, onToggleFavorite, onContextMenu }: MediaRowProps): JSX.Element {
+  const { t } = useTranslation()
+  const isPlaying = usePlayerStore((s) => s.isPlaying) && active
+
   return (
     <div
       className={clsx(
@@ -27,28 +32,30 @@ export function MediaRow({ item, index, active, onPlay, onToggleFavorite, onCont
         {index !== undefined ? (
           <>
             <span className="group-hover:hidden">{index + 1}</span>
-            <button onClick={onPlay} aria-label="Play" className="hidden group-hover:flex text-base-100">
+            <button onClick={onPlay} aria-label={t('actions.play')} className="hidden group-hover:flex text-base-100">
               <Play size={13} fill="currentColor" />
             </button>
           </>
         ) : (
-          <button onClick={onPlay} aria-label="Play" className="text-base-400 hover:text-base-100">
+          <button onClick={onPlay} aria-label={t('actions.play')} className="text-base-400 hover:text-base-100">
             <Play size={13} fill="currentColor" />
           </button>
         )}
       </div>
-      <Artwork src={item.artworkPath} kind={item.kind} size={40} rounded="md" />
+      <Artwork src={item.artworkPath} kind={item.kind} size={40} rounded="md" playing={isPlaying} />
       <div className="min-w-0">
         <p className={clsx('truncate text-sm font-medium', active ? 'text-accent' : 'text-base-100')}>
           {item.title ?? item.filename}
         </p>
-        <p className="truncate text-xs text-base-400">{item.artist ?? 'Unknown artist'}</p>
+        <p className="truncate text-xs text-base-400">{item.artist ?? t('player.unknownArtist')}</p>
       </div>
       <p className="truncate text-xs text-base-400">{item.album ?? '—'}</p>
-      <p className="text-right text-xs text-base-400 tabular-nums">{formatDuration(item.duration)}</p>
+      <p dir="ltr" className="text-end text-xs text-base-400 tabular-nums">
+        {formatDuration(item.duration)}
+      </p>
       <button
         onClick={onToggleFavorite}
-        aria-label={item.favorite ? 'Remove from favorites' : 'Add to favorites'}
+        aria-label={item.favorite ? t('actions.removeFromFavorites') : t('actions.addToFavorites')}
         className={clsx(
           'flex justify-center opacity-0 group-hover:opacity-100 transition-opacity',
           item.favorite && 'opacity-100 text-accent'

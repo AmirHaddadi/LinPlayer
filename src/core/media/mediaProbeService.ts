@@ -4,6 +4,7 @@ import type { MediaKind, MediaMetadata, PlaybackCapabilities } from '@shared/typ
 import type { MediaEngine } from './types'
 import { ffprobeFile } from './ffprobe'
 import { readTags } from './tags'
+import { findFolderArtwork } from './folderArtwork'
 import { createLogger } from '@core/logging/logger'
 
 const logger = createLogger('media:probe')
@@ -53,6 +54,18 @@ export class MediaProbeService implements MediaEngine {
 
     const tags = kind === 'audio' ? await readTags(filePath) : null
 
+    // Artwork lookup order: embedded tag artwork first, then a conventionally
+    // named cover image in the same folder. Never fetched from the network.
+    let artworkBuffer = tags?.artworkBuffer ?? null
+    let artworkMimeType = tags?.artworkMimeType ?? null
+    if (!artworkBuffer) {
+      const folderArtwork = await findFolderArtwork(filePath)
+      if (folderArtwork) {
+        artworkBuffer = folderArtwork.buffer
+        artworkMimeType = folderArtwork.mimeType
+      }
+    }
+
     const fallbackTitle = filename.replace(/\.[^./]+$/, '')
 
     return {
@@ -70,8 +83,8 @@ export class MediaProbeService implements MediaEngine {
       bitrate: probe?.format.bitRate ?? probe?.audioStream?.bitRate ?? null,
       frameRate: probe?.videoStream?.frameRate ?? null,
       audioChannels: probe?.audioStream?.channels ?? null,
-      artworkBuffer: tags?.artworkBuffer ?? null,
-      artworkMimeType: tags?.artworkMimeType ?? null
+      artworkBuffer,
+      artworkMimeType
     }
   }
 
